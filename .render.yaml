@@ -5,9 +5,9 @@ services:
     plan: free
     branch: main
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn --worker-class eventlet -w 1 app:app"
+    startCommand: "gunicorn --worker-class gevent -w 1 app:app"  # Changed to gevent
     envVars:
       - key: SECRET_KEY
         generateValue: true
       - key: PYTHON_VERSION
-        value: 3.11.0  
+        value: 3.11.0  # Using 3.11 for maximum compatibility
