@@ -1,4 +1,3 @@
-/* static/css/style.css */
 body {
     background-color: #f8f9fa;
 }
@@ -42,4 +41,22 @@ body {
 
 .message:hover {
     background-color: #e9ecef;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+#roomCodeInput, #callLink {
+    max-width: 200px;
+}
+
+.dropdown-menu {
+    z-index: 1021; /* Ensure dropdown appears above other elements */
+}
+
+.message.system {
+    font-style: italic;
+    color: #6c757d;
 }

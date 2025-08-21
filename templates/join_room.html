@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Join a Call Room</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="room_code" class="form-label">Room Code</label>
+                        <input type="text" class="form-control" id="room_code" name="room_code" 
+                               placeholder="Enter room code" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Join Room</button>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('create_room') }}" class="btn btn-outline-secondary">Create New Room Instead</a>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

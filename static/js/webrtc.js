@@ -1,4 +1,3 @@
-// static/js/webrtc.js
 let localStream;
 let remoteStream;
 let peerConnection;
@@ -29,15 +28,28 @@ function initWebRTC(roomId, userName) {
     // Connect to Socket.IO
     socket = io();
     
-    // Join the room
-    socket.emit('join_room', { room: room, username: username });
-    
     // Set up event listeners
     setupSocketListeners();
     setupMediaControls();
     
-    // Initialize media
-    initMedia();
+    // Initialize media and join room
+    initMedia().then(() => {
+        handleRoomJoin();
+    });
+}
+
+function handleRoomJoin() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomParam = urlParams.get('room');
+    
+    if (roomParam) {
+        // We're joining an existing room
+        socket.emit('join_room', { room: roomParam, username: username });
+    } else {
+        // We're creating a new room
+        // This shouldn't happen with our new routing, but just in case
+        window.location.href = '/create_room';
+    }
 }
 
 function setupSocketListeners() {
@@ -268,7 +280,7 @@ function sendMessage() {
     const messageInput = document.getElementById('chatInput');
     const message = messageInput.value.trim();
     
-    if (message) {
+    if (message && socket) {
         const timestamp = new Date().toISOString();
         socket.emit('send_message', {
             room: room,

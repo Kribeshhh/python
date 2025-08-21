@@ -1,7 +1,7 @@
+import os
 import eventlet
 eventlet.monkey_patch()
 
-import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -11,8 +11,14 @@ import uuid
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-here'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
+
+# Database configuration
+if os.environ.get('DATABASE_URL'):
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("postgres://", "postgresql://", 1)
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize extensions
@@ -158,6 +164,24 @@ def delete_contact(contact_id):
     db.session.commit()
     flash('Contact deleted successfully')
     return redirect(url_for('contacts'))
+
+@app.route('/create_room')
+@login_required
+def create_room():
+    room_code = str(uuid.uuid4())[:8]
+    return redirect(url_for('call', room=room_code))
+
+@app.route('/join_room', methods=['GET', 'POST'])
+@login_required
+def join_room_page():
+    if request.method == 'POST':
+        room_code = request.form['room_code']
+        if room_code:
+            return redirect(url_for('call', room=room_code))
+        else:
+            flash('Please enter a room code')
+    
+    return render_template('join_room.html')
 
 @app.route('/call')
 @login_required
