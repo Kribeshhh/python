@@ -1,0 +1,23 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <h1 class="display-4 mb-4">Welcome to ContactManager</h1>
+        <p class="lead">Manage your contacts and connect with them through video calls</p>
+        
+        {% if not current_user.is_authenticated %}
+        <div class="mt-5">
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg me-3">Login</a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg">Register</a>
+        </div>
+        {% else %}
+        <div class="mt-5">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg me-3">Dashboard</a>
+            <a href="{{ url_for('contacts') }}" class="btn btn-outline-primary btn-lg">My Contacts</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

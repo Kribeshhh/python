@@ -1,0 +1,44 @@
+<!-- templates/dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="text-center mb-4">
+            <h2>Welcome, {{ current_user.username }}!</h2>
+            <p class="lead">Manage your contacts and start video calls</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">My Contacts</h5>
+                        <p class="card-text">View and manage your contact list</p>
+                        <a href="{{ url_for('contacts') }}" class="btn btn-primary">Manage Contacts</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Start a Call</h5>
+                        <p class="card-text">Initiate a video call with your contacts</p>
+                        <a href="{{ url_for('call') }}" class="btn btn-success">Create Call Room</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                <p>Your recent calls and contacts will appear here.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

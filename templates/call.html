@@ -1,0 +1,80 @@
+<!-- templates/call.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Video Call</h4>
+                <div>
+                    <button id="toggleVideo" class="btn btn-outline-primary btn-sm">Camera Off</button>
+                    <button id="toggleAudio" class="btn btn-outline-primary btn-sm">Mute</button>
+                    <button id="shareScreen" class="btn btn-outline-info btn-sm">Share Screen</button>
+                    <button id="endCall" class="btn btn-outline-danger btn-sm">End Call</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Your Video</h5>
+                        <video id="localVideo" autoplay muted playsinline class="w-100 rounded"></video>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Remote Video</h5>
+                        <video id="remoteVideo" autoplay playsinline class="w-100 rounded"></video>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <h5>Call Information</h5>
+                    <p>Room Code: <strong id="roomCode">{{ room }}</strong></p>
+                    <p>Share this link: <strong id="callLink"></strong></p>
+                    <button id="copyLink" class="btn btn-sm btn-outline-secondary">Copy Link</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5>Chat</h5>
+            </div>
+            <div class="card-body chat-body" style="height: 300px; overflow-y: auto;">
+                <div id="chatMessages"></div>
+            </div>
+            <div class="card-footer">
+                <div class="input-group">
+                    <input type="text" id="chatInput" class="form-control" placeholder="Type your message...">
+                    <button id="sendMessage" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/webrtc.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const room = "{{ room }}";
+        const username = "{{ current_user.username }}";
+        
+        // Set the call link
+        const callLink = `${window.location.origin}${window.location.pathname}?room=${room}`;
+        document.getElementById('callLink').textContent = callLink;
+        
+        // Initialize WebRTC and chat functionality
+        initWebRTC(room, username);
+        
+        // Copy link functionality
+        document.getElementById('copyLink').addEventListener('click', function() {
+            navigator.clipboard.writeText(callLink).then(function() {
+                alert('Call link copied to clipboard!');
+            });
+        });
+    });
+</script>
+{% endblock %}
